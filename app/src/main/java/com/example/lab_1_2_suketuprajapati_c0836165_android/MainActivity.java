@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.lab_1_2_suketuprajapati_c0836165_android.adapters.ProductAdaptor;
 import com.example.lab_1_2_suketuprajapati_c0836165_android.database.ProductDataBase;
@@ -15,6 +17,7 @@ import com.example.lab_1_2_suketuprajapati_c0836165_android.database.ProductRepo
 import com.example.lab_1_2_suketuprajapati_c0836165_android.model.Product;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,12 +26,16 @@ public class MainActivity extends AppCompatActivity {
     private ProductAdaptor mAdapter;
     private ProductDataBase mDb;
 
+    SearchView searchView;
+    List<Product> product;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         floatingActionButton = findViewById(R.id.addfab);
+        searchView = findViewById(R.id.searchView);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +47,20 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.rview);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
 
         // Initialize the adapter and attach it to the RecyclerView
         mAdapter = new ProductAdaptor(this);
@@ -69,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -91,5 +114,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+
     }
+
+
 }
